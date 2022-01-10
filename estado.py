@@ -23,6 +23,9 @@ class Estado:
         for cd in casos_diarios:
             aux += cd
             self.casosAcumulados.append(aux)
+
+    def list_fecha(self, fechas: list):
+        self.fechas = fechas
     
 def main():
     es = Estado()

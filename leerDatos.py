@@ -12,12 +12,15 @@ def leer_csv(archivo: str = 'ejemplo.csv'):
 def obtecion_datos(archivo: str = 'ejemplo.csv'):
     '''Obtiene los datos del archivo'''
     list_csv = leer_csv(archivo)
+    fecha = list_csv[0]
+    fecha = fecha[3:len(fecha)]
     list_csv = list_csv[1:len(list_csv)]
     estados = []
     for e in list_csv:
         aux = estado.Estado(nombre_estado=e[2],tamano_poblacion=int(e[1]))
         aux.list_CasosDiarios(int_list(e[3:len(e)]))
         aux.list_CasosAcumulados(aux.casosDiarios)
+        aux.list_fecha(fecha)
         estados.append(aux)
     return estados
 
@@ -28,6 +31,6 @@ def int_list(Lista: list):
         aux.append(int(i))
     return aux
 
-datos = obtecion_datos(archivo='C:\\Users\\Angel de Jesus Rod V\\Documents\\Trabajos de Escuela\\Simulación\\Datos\\Casos_Diarios.csv')
+datos = obtecion_datos(archivo='Datos\\Casos_Diarios.csv')
 for i in datos:
-    print(i.nombre)
+    print(str(len(i.casosDiarios))+","+str(len(i.fechas)))
