@@ -30,7 +30,10 @@ def int_list(Lista: list):
     for i in Lista:
         aux.append(int(i))
     return aux
-
+'''
 datos = obtecion_datos(archivo='Datos\\Casos_Diarios.csv')
+nombres = []
 for i in datos:
-    print(str(len(i.casosDiarios))+","+str(len(i.fechas)))
+    nombres.append(str(i.nombre))
+print(nombres)
+'''
