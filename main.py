@@ -1,34 +1,20 @@
-
-from tkinter import Tk, Frame, font, ttk, Label
-from typing import no_type_check
+from tkinter import Tk, Frame, font, ttk, Label, Menu
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 #Creamos la ventana
 root = Tk()
-root.title("Simulación de COVID-19 México")
-root.geometry("1000x650") #ancho x alto
-'''
-frame = Frame(root)
-frame.grid(column=0,row=0,sticky="nsew")
+root.title("Simulación de COVID-19 México") # Establecemos el titulo
+root.geometry("1000x650") # ancho x alto
 
-fig, ax = plt.subplots(dpi=90, figsize=(7,5))
-fig.suptitle('SIR')
+menubar = Menu(root,selectcolor="black") # Inicializamos el menu
+filemenu = Menu(menubar, tearoff=0) # Inicializamos un submenu para archivo
+filemenu.add_command(label="Abrir") # Añadimos la etiqueta para abrir un archivo y su funcion
+filemenu.add_separator()
+filemenu.add_command(label="Salir",command=root.quit) # Añadimos una opción para salir
+menubar.add_cascade(label="Archivo",menu=filemenu) # Agregamos el submenu de archivo
+root.config(menu=menubar) # Mostramos el menu
 
-canvas = FigureCanvasTkAgg(fig,master=frame)
-canvas.draw()
-canvas.get_tk_widget().grid(column=0,row=0,rowspan=3)
-'''
-
-'''
-comEstado = ttk.Combobox(state="readonly")
-comEstado.place(x=50,y=50)
-comEstado["values"] = ["AGUASCALIENTES","BAJA CALIFORNIA","BAJA CALIFORNIA SUR",
-                        "CAMPECHE","CHIAPAS","CHIHUAHUA","DISTRITO FEDERAL","COAHUILA",
-                        "COLIMA","DURANGO","GUANAJUATO","GUERRERO","HIDALGO","JALISCO",
-                        "MEXICO","MICHOACAN","MORELOS","NAYARIT","NUEVO LEON","OAXACA"]
-comModelo = ttk.Combobox(state="readonly")
-'''
 notebook = ttk.Notebook(root,width=980,height=510)
 tab1 = Frame(notebook)
 tab2 = Frame(notebook)
