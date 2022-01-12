@@ -1,10 +1,12 @@
 from tkinter import Button, Entry, Menubutton, Radiobutton, StringVar, Tk, Frame, font, ttk, Label, Menu
+from tkinter.constants import CENTER, NO
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # Importando mis clases
 import leerDatos as lDt
 import estado
+import modelos as md
 
 class  App:
     listEstado = []
@@ -45,7 +47,8 @@ class  App:
         
         #  Creamos un boton para seleccionar los datos
         btnSeleccionar = Button(self.master,text="Seleccionar",font=self.miStyle,command=self.funSeleccionar,
-                                background='black',foreground='white')
+                                background='#2D2D2D',foreground='#CCCCCC',activebackground='#16825D',
+                                activeforeground='#CCCCCC',)
         btnSeleccionar.place(x=300,y=80)
 
         # Opciones para visualizar los metodos
@@ -84,11 +87,11 @@ class  App:
         self.str_sr = StringVar()
         self.str_sr.set("0")
         self.str_sb = StringVar()
-        self.str_sb.set("0.1999")
+        self.str_sb.set("0.199")
         self.str_sy = StringVar()
         self.str_sy.set("0.0714")
         self.str_st = StringVar()
-        self.str_st.set("0")
+        self.str_st.set("200")
         self.lab_s1 = Label(self.frameT,text="Fecha:",font=self.miStyle)
         self.cobF1 = ttk.Combobox(self.frameT,state="readonly",font=self.miStyle)
         self.cobF1.bind('<<ComboboxSelected>>',self.mostrarDatosSir)
@@ -107,11 +110,26 @@ class  App:
         self.txt_s5 = Entry(self.frameT,font=self.miStyle,textvariable=self.str_sb)
         self.txt_s6 = Entry(self.frameT,font=self.miStyle,textvariable=self.str_sy)
         self.txt_s7 = Entry(self.frameT,font=self.miStyle,textvariable=self.str_st)
-        self.simularSir = Button(self.frameT,text="SIMULAR",font=self.miStyle)
-        self.figs, axs = plt.subplots(dpi=90,figsize=(5,5))
+        self.simularSir = Button(self.frameT,text="SIMULAR",font=self.miStyle,command=self.calcularSIR,
+                                background='#2D2D2D',foreground='#CCCCCC',activebackground='#16825D',
+                                activeforeground='#CCCCCC',)
+        self.figs, self.axs = plt.subplots(dpi=90,figsize=(5,5))
         self.figs.suptitle('SIR')
         self.can_s = FigureCanvasTkAgg(self.figs,self.frameT)
-        self.can_s.draw()
+        self.can_s.get_tk_widget().place(x=850,y=20)
+        # TABLA DE SIR
+        self.tab_s = ttk.Treeview(self.frameT,height=21)
+        self.tab_s['columns'] = ('t','s','i','r')
+        self.tab_s.column("#0",width=0,stretch=NO)
+        self.tab_s.column("t",anchor=CENTER,width=80)
+        self.tab_s.column("s",anchor=CENTER,width=80)
+        self.tab_s.column("i",anchor=CENTER,width=80)
+        self.tab_s.column("r",anchor=CENTER,width=80)
+        self.tab_s.heading("#0",text="",anchor=CENTER)
+        self.tab_s.heading("t",text="t",anchor=CENTER)
+        self.tab_s.heading("s",text="S",anchor=CENTER)
+        self.tab_s.heading("i",text="I",anchor=CENTER)
+        self.tab_s.heading("r",text="R",anchor=CENTER)
 
         # Freme para el modelo Logistico ----------------------------------------------------------------------------
         self.lab_lTitulo = Label(self.frameT,text="MODELO LOGISTICO",font=("Calibri",25))
@@ -137,6 +155,30 @@ class  App:
             self.cobF1['values'] = self.Estadoact.fechas
             #print(str(self.cobEstado.current()))
             #poss = self.listEstado.index(self.cobEstado.get())
+
+    # Calcular los datos de SIR
+    def calcularSIR(self):
+        if self.cobF1.get() != '':
+            n = int(self.str_sn.get())
+            s = int(self.str_ss.get())
+            i = int(self.str_si.get())
+            r = int(self.str_sr.get())
+            b = float(self.str_sb.get())
+            y = float(self.str_sy.get())
+            t = int(self.str_st.get())
+            self.rSir = md.SIR(n,s,i,r,t,b,y)
+            self.axs.clear()
+            self.axs.scatter(self.rSir[0],self.rSir[1], label="Susceptibles")
+            self.axs.scatter(self.rSir[0],self.rSir[2], label="Infectados")
+            self.axs.scatter(self.rSir[0],self.rSir[3], label="Recuperados")
+            self.axs.legend()
+            self.can_s.draw()
+            self.tab_s.delete(*self.tab_s.get_children())
+            for xd in range(0,t):
+                self.tab_s.insert(values=[self.rSir[0][xd],self.rSir[1][xd],self.rSir[2][xd],self.rSir[3][xd]],
+                                parent='',index='end')
+            
+            
 
     # Funcion para mostrar los datos del sir
     def mostrarDatosSir(self,event):
@@ -176,6 +218,7 @@ class  App:
         self.txt_s7.place(x=50,y=430)
         self.simularSir.place(x=280,y=100)
         self.can_s.get_tk_widget().place(x=850,y=20)
+        self.tab_s.place(x=500,y=20)
 
     # ocultar los elementos del sir
     def no_btnSir(self):
@@ -201,6 +244,7 @@ class  App:
         self.txt_s7.place_forget()
         self.simularSir.place_forget()
         self.can_s.get_tk_widget().place_forget()
+        self.tab_s.place_forget()
 
     def fun_btnLog(self):
         self.no_btnSir()
