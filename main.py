@@ -11,7 +11,7 @@ import modelos as md
 class  App:
     listEstado = []
     listNomE = []
-    nameArchivo = 'Datos\\Casos_Diarios.csv'
+    nameArchivo = ''
     
     def __init__(self,master:Tk) -> None:
         self.master = master
@@ -64,7 +64,7 @@ class  App:
         self.btnGop.place(x=200,y=150)
 
         # Cargamos los datos predeterminados
-        self.Cargar()
+        # self.Cargar()
 
         # Frame de Trabajo
         self.frameT = Frame(self.master,width=1320,height=500)
@@ -198,7 +198,8 @@ class  App:
     # Funcion para Cargar el archivo
     def abrirArchivo(self):
         self.nameArchivo = filedialog.askopenfilename()
-        self.Cargar()
+        if self.nameArchivo != '':
+            self.Cargar()
 
     def Cargar(self):
         self.listEstado = lDt.obtecion_datos(archivo=self.nameArchivo)
@@ -427,5 +428,6 @@ if __name__  == "__main__":
     root.geometry("{w}x{h}".format(w=w1,h=h1)) # ancho x alto
     #root.resizable(False,False)
     root.state('zoomed')
+    root.protocol("WM_DELETE_WINDOW",root.quit)
     app = App(root)
     root.mainloop()

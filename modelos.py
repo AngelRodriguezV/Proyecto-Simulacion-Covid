@@ -1,6 +1,5 @@
 import numpy as np
 # Modelo SIR
-
 def dS(N, S, I, b):
     return S-((b*S*I)/N)
 
