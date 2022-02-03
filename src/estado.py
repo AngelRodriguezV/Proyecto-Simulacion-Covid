@@ -1,5 +1,6 @@
+
 class Estado:
-    '''Clase para manejar los datos de los estados'''
+    """Clase para manejar los datos de los estados"""
 
     def __init__(self, nombre_estado: str = "Oaxaca", tamano_poblacion: int = 4143593):
         self.nombre = nombre_estado
