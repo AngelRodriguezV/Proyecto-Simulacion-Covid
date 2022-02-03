@@ -1,14 +1,15 @@
 import numpy as np
-# Modelo SIR
-def dS(N, S, I, b):
+# MODELO SIR
+# Función para evaluar los susceptibles
+def dS(N, S, I, b): 
     return S-((b*S*I)/N)
-
-def dI(N, S, I, b, y):
+# Función para evaluar los Infectados
+def dI(N, S, I, b, y): 
     return I+((b*S*I)/N)-(y*I)
-
+# Función para evaluar los Recuperados
 def dR(I, R, y):
     return R+(y*I)
-
+# Funcion calcula el modelo SIR
 def SIR(N, S, I, R, t, b=0.199, y=0.0714):
       vS = [S]
       vI = [I]
@@ -33,13 +34,11 @@ def Logistica(t: int, P: list):
     return [vt,vP]    
 
 # Modelo Gompertz
-def P(a,b,c,t):
+def P(a,b,c,t): # Calcular funcion P
     return a*np.exp(-b*np.exp(-c*t))
-
-def dP(a, b, c, t):
+def dP(a, b, c, t): # Calcular la derivada
     return a*b*c*np.exp(-c*t)*np.exp(-b*np.exp(-c*t))
-
-def gompertz(t, const: list):
+def gompertz(t, const: list): # Calcula la funcion de gompertz
     vP = []
     vdP = []
     vt = []
@@ -48,8 +47,7 @@ def gompertz(t, const: list):
         vdP.append(dP(const[0],const[1],const[2],m))
         vt.append(m)
     return [vt,vP,vdP]
-
-def cal_constante(p: list):
+def cal_constante(p: list): # Calcular las constantes
     y = []
     a = p[len(p)-1]+1
     for i in p:
